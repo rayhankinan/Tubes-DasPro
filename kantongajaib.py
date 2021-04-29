@@ -61,10 +61,6 @@ def eraseCSV(filename, index):
     file.close()
 
     file = open(filename, "w")
-    file.write("")
-    file.close()
-
-    file = open(filename, "a")
     file.write(parseList(keylist))
     for i in range(len(backupData[keylist[0]])):
         if i == index:
@@ -85,10 +81,6 @@ def editCSV(filename, index, value):
     file.close()
 
     file = open(filename, "w")
-    file.write("")
-    file.close()
-
-    file = open(filename, "a")
     file.write(parseList(keylist))
     for i in range(len(backupData[keylist[0]])):
         if i == index:
@@ -99,7 +91,7 @@ def editCSV(filename, index, value):
                 temp.append(backupData[key][i])
             file.write(parseList(temp))
     file.close()
-    
+
 def searchLib(library, key, val): # Sori masih sequential
     for i in range(len(library[key])):
         if library[key][i] == val:

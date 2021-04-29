@@ -49,7 +49,19 @@ def readCSV(filename):
     return library
 
 def writeCSV(filename, val):
-    file = open(filename, "a")
+    backupData = readCSV(filename)
+
+    file = open(filename, "r")
+    keylist = parseCSV(file.readline())
+    file.close()
+
+    file = open(filename, "w")
+    file.write(parseList(keylist))
+    for i in range(len(backupData[keylist[0]])):
+        temp = []
+        for key in keylist:
+            temp.append(backupData[key][i])
+        file.write(parseList(temp))
     file.write(parseList(val))
     file.close()
 
@@ -73,7 +85,6 @@ def eraseCSV(filename, index):
     file.close()
 
 def editCSV(filename, index, value):
-
     backupData = readCSV(filename)
 
     file = open(filename, "r")

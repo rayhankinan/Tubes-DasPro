@@ -699,6 +699,10 @@ def kembalikan():
     for i in range(len(itemList)):
         print(f"{i + 1}. {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[i][0])])]} (x{itemList[i][1]})")
     
+    if len(itemList) == 0:
+        print("Belum ada item yang dipinjam! Silahkan coba lagi.")
+        return
+
     while True:
         nomorPengembalian = int(input("Masukkan nomor pengembalian: "))
         if nomorPengembalian <= 0 or nomorPengembalian > len(itemList):
@@ -717,8 +721,8 @@ def kembalikan():
     
     while True:
         jumlahPengembalian = int(input(f"Masukkan jumlah item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[i][0])])]} yang akan dikembalikan: "))
-        if jumlahPengembalian > itemList[nomorPengembalian - 1][1]:
-            print(f"Jumlah pengembalian item {itemList[nomorPengembalian - 1][0]} tidak valid! Silahkan coba lagi.")
+        if jumlahPengembalian > itemList[nomorPengembalian - 1][1] or jumlahPengembalian < 0:
+            print(f"Jumlah pengembalian item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])]} tidak valid! Silahkan coba lagi.")
             continue
         else:
             break

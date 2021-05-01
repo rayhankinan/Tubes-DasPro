@@ -263,7 +263,7 @@ def partition(library, key, low, high):
     swap(library, i + 1, high)
     return i + 1
 
-def quickSort(library, key, low, high):    
+def quickSort(library, key, low, high):
     if low < high:
         pi = partition(library, key, low, high)
 
@@ -555,6 +555,8 @@ def hapusitem():
 
     dataG = readCSV("gadget.csv")
     dataC = readCSV("consumable.csv")
+    dataBorrow = readCSV("gadget_borrow_history.csv")
+    dataReturn = readCSV("gadget_return_history.csv")
     index = -1
 
     while True:
@@ -583,6 +585,10 @@ def hapusitem():
         if ans == "Y" or ans == "y":
             if ID[0] == "G":
                 query.append(("erase", "gadget.csv", index))
+                for i in findallLib(dataBorrow, "id_gadget", ID):
+                    if dataBorrow["is_returned"][i] == "False":
+                        newInput = [dataBorrow["id"][i], dataBorrow["id_peminjam"][i], dataBorrow["id_gadget"][i], dataBorrow["tanggal_peminjaman"][i], dataBorrow["jumlah"][i], str(True)]
+                        query.append(("edit", "gadget_borrow_history.csv", i, newInput))
             else: # Nilai ID[0] cuman bisa G ama C
                 query.append(("erase", "consumable.csv", index))
             print(f"{'Gadget' if ID[0] == 'G' else 'Consumable'} {dataG['nama'][index] if ID[0] == 'G' else dataC['nama'][index]} berhasil dihapus dari database.")
@@ -818,7 +824,7 @@ def riwayatpinjam():
                 namaPeminjam = dataUser['nama'][searchLib(dataUser, "id", display[key][i])]
                 print(f"Nama peminjam: {namaPeminjam}")
             elif key == "id_gadget":
-                namaItem = dataItem['nama'][searchLib(dataItem, "id", display[key][i])]
+                namaItem = dataItem['nama'][searchLib(dataItem, "id", display[key][i])] if searchLib(dataItem, "id", display[key][i]) != -1 else "Gadget telah dihapus dari sistem oleh admin."
                 print(f"Nama gadget: {namaItem}")
             elif key == "tanggal_peminjaman":
                 print(f"Tanggal peminjaman: {display[key][i]}")
@@ -857,7 +863,7 @@ def riwayatkembali():
             elif key == "id_pengembalian":
                 namaPengembali = dataUser['nama'][searchLib(dataUser, "id", dataBorrow['id_peminjam'][searchLib(dataBorrow, "id", display[key][i])])]
                 print(f"Nama pengembali: {namaPengembali}")
-                namaItem = dataItem['nama'][searchLib(dataItem, "id", dataBorrow['id_gadget'][searchLib(dataBorrow, "id", display[key][i])])]
+                namaItem = dataItem['nama'][searchLib(dataItem, "id", dataBorrow['id_gadget'][searchLib(dataBorrow, "id", display[key][i])])] if searchLib(dataItem, "id", dataBorrow['id_gadget'][searchLib(dataBorrow, "id", display[key][i])]) != -1 else "Gadget telah dihapus dari sistem oleh admin."
                 print(f"Nama gadget: {namaItem}")
             elif key == "tanggal_pengembalian":
                 print(f"Tanggal pengembalian: {display[key][i]}")

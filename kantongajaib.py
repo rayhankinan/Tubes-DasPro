@@ -636,11 +636,11 @@ def ubahjumlah():
         if ID[0] == "G":
             newInput = [ID, dataG['nama'][index], dataG['deskripsi'][index], str(stok + jumlah), dataG['rarity'][index], dataG['tahun_ditemukan'][index]]
             query.append(("edit", "gadget.csv", index, newInput))
-            print(f"{abs(jumlah)} {dataG['nama'][index]} berhasil {'ditambahkan' if jumlah >= 0 else 'dibuang'} karena stok kurang. Stok sekarang: {jumlah + stok}.")
+            print(f"{abs(jumlah)} {dataG['nama'][index]} berhasil {'ditambahkan' if jumlah >= 0 else 'dibuang'}. Stok sekarang: {jumlah + stok}.")
         else: # Nilai ID[0] cuman bisa G ama C
             newInput = [ID, dataC['nama'][index], dataC['deskripsi'][index], str(stok + jumlah), dataC['rarity'][index]]
             query.append(("edit", "consumable.csv", index, newInput))
-            print(f"{abs(jumlah)} {dataC['nama'][index]} berhasil {'ditambahkan' if jumlah >= 0 else 'dibuang'} karena stok kurang. Stok sekarang: {jumlah + stok}.")
+            print(f"{abs(jumlah)} {dataC['nama'][index]} berhasil {'ditambahkan' if jumlah >= 0 else 'dibuang'}. Stok sekarang: {jumlah + stok}.")
 
 def pinjam():
     global loginID

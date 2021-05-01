@@ -985,6 +985,7 @@ def guide():
         print("pinjam - untuk melakukan peminjaman gadget")
         print("kembalikan - untuk melakukan pengembalian gadget")
         print("minta - untuk melakukan permintaan consumable")
+        print("gacha - untuk melakukan gacha barang Consumable yang berlebih")
         print("save - untuk melakukan save data")
         print("exit - untuk melakukan exit program")
     else: # role == ""

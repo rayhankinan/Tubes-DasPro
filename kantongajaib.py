@@ -726,7 +726,7 @@ def kembalikan():
             break
     
     while True:
-        jumlahPengembalian = int(input(f"Masukkan jumlah item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[i][0])])]} yang akan dikembalikan: "))
+        jumlahPengembalian = int(input(f"Masukkan jumlah item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])]} yang akan dikembalikan: "))
         if jumlahPengembalian > itemList[nomorPengembalian - 1][1] or jumlahPengembalian < 0:
             print(f"Jumlah pengembalian item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])]} tidak valid! Silahkan coba lagi.")
             continue

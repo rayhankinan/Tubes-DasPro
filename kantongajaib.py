@@ -652,10 +652,14 @@ def pinjam():
 
     while True:
         ID = input("Masukkan ID: ")
+        gadget_dipinjam = list(set(findallLib(dataBorrow, "id_peminjam", loginID)) & set(findallLib(dataBorrow, "id_gadget", ID)) & set(findallLib(dataBorrow, "is_returned", "False")))
         if ID[0] == "G":
             index = searchLib(data, "id", ID)
             if index == -1:
                 print("Tidak ada gadget dengan ID tersebut! Silahkan coba lagi.")
+                continue
+            elif ID in (dataBorrow["id_gadget"][i] for i in gadget_dipinjam):
+                print(f"Gadget {data['nama'][index]} sedang Anda pinjam! Silahkan coba lagi.")
                 continue
             else:
                 break
@@ -733,7 +737,7 @@ def kembalikan():
         else:
             break
     
-    index = searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[i][0])])
+    index = searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])
     stok = int(data['jumlah'][index])
 
     newInput = [data['id'][index], data['nama'][index], data['deskripsi'][index], str(stok + jumlahPengembalian), data['rarity'][index], data['tahun_ditemukan'][index]]
@@ -743,12 +747,12 @@ def kembalikan():
     query.append(("write", "gadget_return_history.csv", returnInput))
 
     if jumlahPengembalian == itemList[nomorPengembalian - 1][1]:
-        borrowIndex = searchLib(dataBorrow, 'id', itemList[i][0])
+        borrowIndex = searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])
         borrowInput = [dataBorrow['id'][borrowIndex], loginID, dataBorrow['id_gadget'][borrowIndex], dataBorrow['tanggal_peminjaman'][borrowIndex], dataBorrow['jumlah'][borrowIndex], str(True)]
 
         query.append(("edit", "gadget_borrow_history.csv", borrowIndex, borrowInput))
 
-    print(f"Item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[i][0])])]} (x{jumlahPengembalian}) telah dikembalikan.")
+    print(f"Item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])]} (x{jumlahPengembalian}) telah dikembalikan.")
 
 def minta():
     global loginID

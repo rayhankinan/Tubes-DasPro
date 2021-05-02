@@ -658,7 +658,7 @@ def pinjam():
             if index == -1:
                 print("Tidak ada gadget dengan ID tersebut! Silahkan coba lagi.")
                 continue
-            elif ID in (dataBorrow["id_gadget"][i] for i in gadget_dipinjam):
+            elif ID in [dataBorrow["id_gadget"][i] for i in gadget_dipinjam]:
                 print(f"Gadget {data['nama'][index]} sedang Anda pinjam! Silahkan coba lagi.")
                 continue
             else:

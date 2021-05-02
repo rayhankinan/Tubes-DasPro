@@ -178,13 +178,13 @@ def validasiTanggal(date):
 
     for char in date:
         if char == "/":
-            if len(word) != 2:
+            if len(word) != 2 or not word.isdigit():
                 return False
             dateList.append(int(word))
             word = ""
         else:
             word += char
-    if len(word) != 4:
+    if len(word) != 4 or not word.isdigit():
         return False
     dateList.append(int(word))
 
@@ -397,7 +397,10 @@ def register():
 
     while True:
         nama = input("Masukkan nama: ")
-        if searchLib(data, "nama", nama) != -1:
+        if nama == "":
+            print("Mohon masukkan nama!")
+            continue
+        elif searchLib(data, "nama", nama) != -1:
             print("Nama telah terpakai! Silahkan coba lagi.")
         elif not all(char.isalpha() or (char == " ") for char in nama):
             print("Nama tidak boleh mengandung angka dan simbol! Silahkan coba lagi.")
@@ -407,14 +410,30 @@ def register():
 
     while True:
         username = input("Masukkan username: ")
-        if searchLib(data, "username", username) != -1:
+        if username == "":
+            print("Mohon masukkan username!")
+            continue
+        elif searchLib(data, "username", username) != -1:
             print("Username telah diambil! Silahkan coba lagi.")
             continue
         else:
             break
 
-    password = input("Masukkan password: ")
-    alamat = input("Masukkan alamat: ")
+    while True:
+        password = input("Masukkan password: ")
+        if password == "":
+            print("Mohon masukkan password!")
+            continue
+        else:
+            break
+    
+    while True:
+        alamat = input("Masukkan alamat: ")
+        if alamat == "":
+            print("Mohon masukkan alamat!")
+            continue
+        else:
+            break
 
     newInput = [newIDGenerator(data), username, capitalize(nama), alamat, hashString(password), "user"]
     query.append(("write", "user.csv", newInput))
@@ -431,7 +450,10 @@ def login():
     while True:
         username = input("Masukkan username: ")
         index = searchLib(data, "username", username)
-        if index == -1:
+        if username == "":
+            print("Mohon masukkan username!")
+            continue
+        elif index == -1:
             print("Username belum terdaftar! Silahkan coba lagi.")
             continue
         else:
@@ -441,7 +463,10 @@ def login():
 
     while True:
         password = input("Masukkan password: ")
-        if hashString(password) != passwordCorrect:
+        if password == "":
+            print("Mohon masukkan password!")
+            continue
+        elif hashString(password) != passwordCorrect:
             print("Password salah! Silahkan coba lagi.")
             continue
         else:
@@ -498,13 +523,16 @@ def tambahitem():
 
     while True: # Bagian ini rada beda ama spesifikasi soal, kalo mau ganti santuy2 aja
         ID = input("Masukkan ID: ")
-        if ID[0] == "G":
+        if ID == "":
+            print("Mohon masukkan ID!")
+            continue
+        elif ID[0] == "G" and all(ID[i].isdigit() for i in range(1, len(ID))) and len(ID) > 1:
             if searchLib(dataG, "id", ID) != -1:
                 print("ID sudah terpakai! Silahkan coba lagi.")
                 continue
             else:
                 break
-        elif ID[0] == "C":
+        elif ID[0] == "C" and all(ID[i].isdigit() for i in range(1, len(ID))) and len(ID) > 1:
             if searchLib(dataC, "id", ID) != -1:
                 print("ID sudah terpakai! Silahkan coba lagi.")
                 continue
@@ -516,7 +544,10 @@ def tambahitem():
     
     while True: # Yang ini juga
         nama = input("Masukkan nama: ")
-        if ID[0] == "G":
+        if nama == "":
+            print("Mohon masukkan nama!")
+            continue
+        elif ID[0] == "G":
             if searchLib(dataG, "nama", nama) != -1:
                 print("Nama item sudah terpakai! Silahkan coba lagi.")
                 continue
@@ -529,8 +560,23 @@ def tambahitem():
             else:
                 break
 
-    deskripsi = input("Masukkan deskripsi: ")
-    jumlah = input("Masukkan jumlah: ")
+    while True:
+        deskripsi = input("Masukkan deskripsi: ")
+        if deskripsi == "":
+            print("Mohon masukkan deskripsi!")
+            continue
+        else:
+            break
+
+    while True:
+        jumlah = input("Masukkan jumlah: ")
+        if jumlah == "":
+            print("Mohon masukkan jumlah!")
+        elif jumlah.isdigit() and int(jumlah) >= 0:
+            break
+        else:
+            print("Jumlah tidak valid! Silahkan coba lagi.")
+            continue
 
     while True: # Sama yang ini juga
         rarity = input("Masukkan rarity: ")
@@ -541,7 +587,13 @@ def tambahitem():
             break
 
     if ID[0] == "G":
-        tahun = input("Masukkan tahun ditemukan: ")
+        while True:
+            tahun = input("Masukkan tahun ditemukan: ")
+            if len(tahun) == 4 and tahun.isdigit():
+                break
+            else:
+                print("Tahun tidak valid! Silahkan coba lagi.")
+                continue
         newInput = [ID, nama, deskripsi, jumlah, rarity, tahun]
         query.append(("write", "gadget.csv", newInput))
     else: # Nilai ID[0] cuman bisa G ama C
@@ -561,14 +613,17 @@ def hapusitem():
 
     while True:
         ID = input("Masukkan ID: ")
-        if ID[0] == "G":
+        if ID == "":
+            print("Mohon masukkan ID!")
+            continue
+        elif ID[0] == "G" and all(ID[i].isdigit() for i in range(1, len(ID))) and len(ID) > 1:
             index = searchLib(dataG, "id", ID)
             if index == -1:
                 print("Tidak ada gadget dengan ID tersebut! Silahkan coba lagi.")
                 continue
             else:
                 break
-        elif ID[0] == "C":
+        elif ID[0] == "C" and all(ID[i].isdigit() for i in range(1, len(ID))) and len(ID) > 1:
             index = searchLib(dataC, "id", ID)
             if index == -1:
                 print("Tidak ada consumable dengan ID tersebut! Silahkan coba lagi.")
@@ -608,14 +663,17 @@ def ubahjumlah():
 
     while True:
         ID = input("Masukkan ID: ")
-        if ID[0] == "G":
+        if ID == "":
+            print("Mohon masukkan ID!")
+            continue
+        elif ID[0] == "G" and all(ID[i].isdigit() for i in range(1, len(ID))) and len(ID) > 1:
             index = searchLib(dataG, "id", ID)
             if index == -1:
                 print("Tidak ada gadget dengan ID tersebut! Silahkan coba lagi.")
                 continue
             else:
                 break
-        elif ID[0] == "C":
+        elif ID[0] == "C" and all(ID[i].isdigit() for i in range(1, len(ID))) and len(ID) > 1:
             index = searchLib(dataC, "id", ID)
             if index == -1:
                 print("Tidak ada consumable dengan ID tersebut! Silahkan coba lagi.")
@@ -626,7 +684,17 @@ def ubahjumlah():
             print("ID tidak valid! Silahkan coba lagi.")
             continue
 
-    jumlah = int(input("Masukkan jumlah: ")) # Nanti kubuat validasi bagusnya, untuk skrg gini dulu ya
+    while True:
+        inputjumlah = input("Masukkan jumlah: ")
+        if inputjumlah == "":
+            print("Mohon masukkan jumlah!")
+            continue
+        elif all(inputjumlah[i].isdigit() or inputjumlah[i] == "-" for i in range(len(inputjumlah))):
+            jumlah = int(inputjumlah)
+            break
+        else:
+            print("Jumlah tidak valid! Silahkan coba lagi.")
+            continue
     
     stok = int(dataG['jumlah'][index] if ID[0] == "G" else dataC['jumlah'][index])
 
@@ -653,7 +721,10 @@ def pinjam():
     while True:
         ID = input("Masukkan ID: ")
         gadget_dipinjam = list(set(findallLib(dataBorrow, "id_peminjam", loginID)) & set(findallLib(dataBorrow, "id_gadget", ID)) & set(findallLib(dataBorrow, "is_returned", "False")))
-        if ID[0] == "G":
+        if ID == "":
+            print("Mohon masukkan ID!")
+            continue
+        elif ID[0] == "G" and all(ID[i].isdigit() for i in range(1, len(ID))) and len(ID) > 1:
             index = searchLib(data, "id", ID)
             if index == -1:
                 print("Tidak ada gadget dengan ID tersebut! Silahkan coba lagi.")
@@ -669,19 +740,26 @@ def pinjam():
     
     while True:
         tanggal = input("Masukkan tanggal: ")
-        if not validasiTanggal(tanggal):
+        if tanggal == "":
+            print("Mohon masukkan tanggal!")
+            continue
+        elif not validasiTanggal(tanggal):
             print("Tanggal tidak valid! Silahkan coba lagi.")
             continue
         else:
             break
     
     while True:
-        jumlah = int(input("Masukkan jumlah: ")) # Ini juga nanti harus ku bagusin validasinya
-        if jumlah <= 0:
+        inputjumlah = input("Masukkan jumlah peminjaman: ")
+        if inputjumlah == "":
+            print("Mohon masukkan jumlah peminjaman!")
+            continue
+        elif inputjumlah.isdigit() and int(inputjumlah) > 0:
+            jumlah = int(inputjumlah)
+            break
+        else:
             print("Jumlah peminjaman tidak valid! Silahkan coba lagi.")
             continue
-        else:
-            break
 
     stok = int(data["jumlah"][index])
 
@@ -714,27 +792,38 @@ def kembalikan():
         return
 
     while True:
-        nomorPengembalian = int(input("Masukkan nomor pengembalian: "))
-        if nomorPengembalian <= 0 or nomorPengembalian > len(itemList):
+        inputnomorPengembalian = input("Masukkan nomor pengembalian: ")
+        if inputnomorPengembalian == "":
+            print("Mohon masukkan nomor pengembalian!")
+            continue
+        elif not inputnomorPengembalian.isdigit() or (int(inputnomorPengembalian) <= 0 or int(inputnomorPengembalian) > len(itemList)):
             print("Nomor pengembalian tidak valid! Silahkan coba lagi.")
             continue
         else:
+            nomorPengembalian = int(inputnomorPengembalian)
             break
     
     while True:
         tanggalPengembalian = input("Masukkan tanggal pengembalian: ")
-        if not validasiTanggal(tanggalPengembalian):
+        if tanggalPengembalian == "":
+            print("Mohon masukkan tanggal pengembalian!")
+            continue
+        elif not validasiTanggal(tanggalPengembalian):
             print("Tanggal pengembalian tidak valid! Silahkan coba lagi.")
             continue
         else:
             break
     
     while True:
-        jumlahPengembalian = int(input(f"Masukkan jumlah item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])]} yang akan dikembalikan: "))
-        if jumlahPengembalian > itemList[nomorPengembalian - 1][1] or jumlahPengembalian < 0:
+        inputjumlahPengembalian = input(f"Masukkan jumlah item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])]} yang akan dikembalikan: ")
+        if inputjumlahPengembalian == "":
+            print("Mohon masukkan jumlah pengembalian!")
+            continue
+        elif not inputjumlahPengembalian.isdigit() or (int(inputjumlahPengembalian) > itemList[nomorPengembalian - 1][1] or int(inputjumlahPengembalian) < 0):
             print(f"Jumlah pengembalian item {data['nama'][searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])]} tidak valid! Silahkan coba lagi.")
             continue
         else:
+            jumlahPengembalian = int(inputjumlahPengembalian)
             break
     
     index = searchLib(data, 'id', dataBorrow['id_gadget'][searchLib(dataBorrow, 'id', itemList[nomorPengembalian - 1][0])])
@@ -765,23 +854,33 @@ def minta():
     while True:
         ID = input("Masukkan ID: ")
         index = searchLib(data, "id", ID)
-        if index == -1:
+        if ID == "":
+            print("Mohon masukkan ID!")
+            continue
+        elif index == -1:
             print("Tidak ada consumable dengan ID tersebut! Silahkan coba lagi.")
             continue
         else:
             break
     
-    while True: # Sama ini juga nanti harus ku bagusin validasinya
-        jumlahPermintaan = int(input("Masukkan jumlah: "))
-        if jumlahPermintaan <= 0:
+    while True:
+        inputjumlahPermintaan = input("Masukkan jumlah: ")
+        if inputjumlahPermintaan == "":
+            print("Mohon masukkan jumlah permintaan!")
+            continue
+        elif not inputjumlahPermintaan.isdigit() or int(inputjumlahPermintaan) <= 0:
             print("Jumlah permintaan tidak valid! Silahkan coba lagi.")
             continue
         else:
+            jumlahPermintaan = int(inputjumlahPermintaan)
             break
     
     while True:
         tanggalPermintaan = input("Masukkan tanggal permintaan: ")
-        if not validasiTanggal(tanggalPermintaan):
+        if tanggalPermintaan == "":
+            print("Mohon masukkan tanggal permintaan!")
+            continue
+        elif not validasiTanggal(tanggalPermintaan):
             print("Tanggal permintaan tidak valid! Silahkan coba lagi.")
             continue
         else:

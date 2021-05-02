@@ -1014,6 +1014,7 @@ def riwayatambil():
 
 def save():
     global query
+    global mainDir
 
     saveLoc = input("Masukkan nama folder penyimpanan: ")
 
@@ -1118,46 +1119,58 @@ def gacha(): #ini fungsi gachanya, mencakup dari awal add item sampe dapet item 
 
     data = readCSV("consumable.csv")
 
-    itemTaken = [0 for i in range(len(data['nama']))] # Ini kinan ganti
+    itemTaken = [0 for i in range(len(data['nama']))]
 
     (chanceS, chanceA, chanceB, chanceC) = (0, 0, 0, 0)
     maks = 1
 
-    while (maks < 6): #biar cuma bisa maks nambahin barang 5 kali in one gacha jd choose wisely
-        cons = None
-        jml = None
+    while (maks < 6):
+        inputcons = None
+        inputjml = None
 
         print(f"\nTambahkan Item untuk Meningkatkan Chance Rarity yang didapat! (Attempt {maks}/5)")
         print("=== INVENTORY ===")
         for i in range(len(data['nama'])):
             print(f"{i + 1}. {data['nama'][i]} (x{int(data['jumlah'][i]) - itemTaken[i]})")
-        while (cons == None):
-            cons = int(input("Pilih consumable yang mau digunakan: "))
-            if 1 <= cons <= (len(data) + 1): #BENER GA YA ... aku kira indeks = banyak data = banyak consumable
+        while (inputcons == None):
+            inputcons = input("Pilih consumable yang mau digunakan: ")
+            if inputcons == "":
+                print("Mohon masukkan consumable yang mau digunakan!")
+                inputcons = None
+                continue
+            elif inputcons.isdigit() and 1 <= int(inputcons) <= len(data['nama']) + 1:
+                cons = int(inputcons)
                 break
             else:
                 print("Item tidak ada di inventory!")
-                cons = None
+                inputcons = None
+                continue
+
         index = cons - 1
-        tot = int(data['jumlah'][index]) - itemTaken[index] # Ini kinan ganti
+        tot = int(data['jumlah'][index]) - itemTaken[index]
         
         if tot == 0:
             print(f"Barang {data['nama'][index]} sudah habis! Silahkan coba lagi.")
             continue
 
-        while (jml == None):
-            jml = int(input("Jumlah yang ingin digunakan: "))
+        while (inputjml == None):
+            inputjml = input("Jumlah yang ingin digunakan: ")
             
-            if jml <= 0 or jml > tot:
+            if inputjml == "":
+                print("Mohon masukkan jumlah consumable yang ingin digunakan!")
+                inputjml = None
+                continue
+            elif not inputjml.isdigit() or (int(inputjml) <= 0 or int(inputjml) > tot):
                 print(f"Jumlah tidak valid! Hanya terdapat (x{tot}) {data['nama'][index]} di inventory!")
-                jml = None
+                inputjml = None
+                continue
             else:
+                jml = int(inputjml)
                 break
         
-        itemTaken[index] += jml # Ini kinan ganti
+        itemTaken[index] += jml
         newInput = [data['id'][index], data['nama'][index], data['deskripsi'][index], str(tot - jml), data['rarity'][index]]
-        query.append(("edit", "consumable.csv", index, newInput)) # Ini kinan ganti
-        # editCSV("consumable.csv", index, newInput)
+        query.append(("edit", "consumable.csv", index, newInput))
         print(f"\n{data['nama'][index]} (x{jml}) berhasil ditambahkan!")
         (droprate, rarity) = getRateRarity()
         print(f"Chance mendapatkan Rarity {rarity} (+{droprate}%)")

@@ -1,7 +1,8 @@
 # Program KantongAjaib
-# Spesifikasi Program (tulis nanti hehe)
-
-# KAMUS
+# Program berfungsi sebagai sistem inventarisasi gadget dan item. 
+# User dapat meminjam dan mengembalikan gadget, menggunakan consumable, serta menggunakan fitur gacha. 
+# Admin dapat menambahkan gadget dan consumable baru, mengatur jumlahnya, mendaftarkan user baru, 
+# dan melihat riwayat peminjaman dan pengembalian gadget serta penggunaan consumable 
 
 import argparse
 import sys
